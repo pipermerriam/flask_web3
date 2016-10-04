@@ -1,18 +1,40 @@
-# Config file for automatic testing at travis-ci.org
-# This file will be regenerated if you run travis_pypi_setup.py
-
 language: python
-python: 3.5
-
+python:
+  - "3.5"
+dist: trusty
+sudo: required
 env:
-  - TOXENV=py35
-  - TOXENV=pypy
-
-# command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
-install: pip install -U tox
-
-# command to run tests, e.g. python setup.py test
-script: tox -e ${TOXENV}
+  matrix:
+    - TOX_ENV=py27
+    - TOX_ENV=py34
+    - TOX_ENV=py35
+    - TOX_ENV=flake8
+  global:
+    - CHAIN_SYNC_BLOCK_DELTA=100
+    - SOLC_BINARY="$TRAVIS_BUILD_DIR/solc-versions/solc-0.3.6/solc"
+cache:
+  - pip: true
+  - directories:
+    - $TRAVIS_BUILD_DIR/solc-versions/solc-0.3.6/
+    - $TRAVIS_BUILD_DIR/solc-versions/solidity-0.3.6/build/
+    - $HOME/.ethash/
+before_install:
+  - sudo add-apt-repository -y ppa:ethereum/ethereum
+  - sudo apt-get update
+install:
+  - ./bin/install_solc.sh
+  - travis_retry sudo apt-get install -y ethereum
+  - travis_retry pip install setuptools --upgrade
+  - travis_retry pip install tox
+before_script:
+  - ls -lah $TRAVIS_BUILD_DIR/solc-versions/solc-0.3.6/
+  - ./solc-versions/solc-0.3.6/solc --version
+  - mkdir -p $HOME/.ethash
+  - geth makedag 0 $HOME/.ethash
+script:
+  - tox -e $TOX_ENV --recreate
+after_script:
+  - cat .tox/$TOX_ENV/log/*.log
 
 # After you create the Github repo and add it to Travis, run the
 # travis_pypi_setup.py script to finish PyPI deployment setup
