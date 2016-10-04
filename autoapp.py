@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 """Create an application instance."""
+from gevent import monkey
+
+monkey.patch_all()
 
 from example.app import create_app
 from example.settings import DevConfig
