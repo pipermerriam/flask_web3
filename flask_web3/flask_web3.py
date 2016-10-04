@@ -33,13 +33,12 @@ class FlaskWeb3(object):
         app.extensions[self.config_prefix.lower()] = self
 
     def start_geth(self):
-        if current_app.config.get('FLASKWEB3_CHAIN_NAME') == 'local':
-            geth_proc = DevGethProcess(
-                chain_name=current_app.config.get('FLASKWEB3_CHAIN_NAME'),
-                base_dir=get_blockchains_dir(
-                    current_app.config.get('FLASKWEB3_PROJECTDIR')))
-            geth_proc.start()
-            return geth_proc
+        geth_proc = DevGethProcess(
+            chain_name=current_app.config.get('FLASKWEB3_CHAIN_NAME'),
+            base_dir=get_blockchains_dir(
+                current_app.config.get('FLASKWEB3_PROJECTDIR')))
+        geth_proc.start()
+        return geth_proc
 
     @property
     def _geth(self):

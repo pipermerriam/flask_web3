@@ -16,7 +16,7 @@ def app():
 @pytest.fixture
 def flaskweb3(app):
     flaskweb3 = FlaskWeb3()
-    app.config['FLASKWEB3_CHAIN_NAME'] = 'local'
+    app.config['FLASKWEB3_CHAIN_NAME'] = 'devchain'
     app.config['FLASKWEB3_PROJECTDIR'] = '.'
     app.config['FLASKWEB3_CHAINDIR'] = 'chains'
     flaskweb3.init_app(app)
