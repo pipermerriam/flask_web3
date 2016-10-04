@@ -22,7 +22,7 @@ def flaskweb3(app):
     flaskweb3.init_app(app)
     return flaskweb3
 
-def test_constructor(app, flaskweb3):
+def test_constructor(flaskweb3):
     assert flaskweb3.chain_name is not None
     assert flaskweb3.base_dir is not None
 
