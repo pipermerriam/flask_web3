@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Integration tests for flask_web3."""
-
 import flask
+import time
 from web3 import Web3
 
 from flask.ext.web3.flask_web3 import FlaskWeb3
@@ -41,6 +41,8 @@ def test_coinbase_exists(app, flaskweb3):
     with app.app_context():
         web3f = flaskweb3.web3
         assert isinstance(web3f, Web3)
+        # ugly way to be sure geth is up
+        time.sleep(2)
         assert web3f.eth.coinbase is not None
 
 
